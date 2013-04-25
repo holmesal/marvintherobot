@@ -19,9 +19,9 @@ Genome
 -----------
 
 For every situation marvin finds himself in, there is a corresponding strategy that tells him what to do in that situation. For example, if there is a piece of trash to his North and nothing else to his East, West, South, and current location, the grid looks like:
-`000
 000
-000`
+000
+000
 he has a corresponding rule that tells him what to do. This situation would be encoded as '10000' (North, South, East, West, Current where) 
 
 The component that evolves is Marvin's "genome", the collection of his actions in response to finding himself in specific situations. For example, if he finds himself in empty space, with no walls or trash around him, one of his genes tells his what to do (move in a certain direction, try to pick up some trash, etc).
