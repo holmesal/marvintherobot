@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>marvin.litcoffee</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+
+  <div id="container">
+    <div id="background"></div>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>marvin.litcoffee</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h1">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <h1>Marvin the trash-collecting robot</h1>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h2">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <h2>But why?</h2>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>This excellent example is taken from a book called <em>Complexity: A Guided Tour</em>. 
+If you&#39;re new to genetic algorithms, this is supposed to be an easy-to-follow example.</p>
+<p>Wokka wokka. Or something.</p>
+<h2>Variables</h2>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>The maximum number of members in the population.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>carryingCapacity = <span class="number">200</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>The number of iterations to go through. I don&#39;t mess around with measuring convergence in this example.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>numIterations = <span class="number">1</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>The number of situations over which to average a single solution&#39;s fitness    </p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>fitnessIterations = <span class="number">100</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>The side length of the area to be cleaned</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>sideLength = <span class="number">10</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>The limit on the number of moves Marvin can make per simulation</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>moveLimit = <span class="number">200</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h2">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <h2>Setup</h2>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="function"><span class="title">rando</span></span> = (min,max) -&gt;
+	max += <span class="number">1</span>
+	Math.floor Math.random() * (max - min) + min
+
+<span class="function"><span class="title">displayGrid</span></span> = (grid) -&gt;
+	display = []
+	<span class="keyword">for</span> x <span class="keyword">in</span> [<span class="number">0.</span>.grid.length-<span class="number">1</span>] 
+		display[x] = []
+		<span class="keyword">for</span> y <span class="keyword">in</span> [<span class="number">0.</span>.grid.length-<span class="number">1</span>]
+			display[x][y] = grid[y][x]
+
+	console.log display</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <p>The solution class is one potential candidate solution. Each solution has a genome.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="class"><span class="keyword">class</span> <span class="title">Solution</span></span>
+	constructor: -&gt;
+		<span class="property">@fitnessvals</span> = []
+		<span class="property">@fitness</span> = <span class="number">0</span>
+		<span class="property">@genome</span> = []
+		<span class="property">@simvals</span> =
+			x: <span class="number">0</span>
+			y: <span class="number">0</span>
+			move: <span class="number">0</span>
+	randomGenome: -&gt;
+		<span class="property">@genome</span> = (rando <span class="number">0</span>,<span class="number">6</span> <span class="keyword">for</span> x <span class="keyword">in</span> [<span class="number">0.</span><span class="number">.242</span>])</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+              <p>The position in the genome describes what situation Marvin finds himself in. There are 243 possible situation, some of which are impossible.</p>
+<p>Each element in the genome describes Marvin&#39;s course of action when faced with that situation. They are:</p>
+<ul>
+<li>0 Move North</li>
+<li>1 Move South</li>
+<li>2 Move East </li>
+<li>3 Move West</li>
+<li>4 Stay Put </li>
+<li>5 Pick Up A Can </li>
+<li>6 Make a Random Move</li>
+</ul>
+<p>Damn.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	findFitness: -&gt;
+		<span class="keyword">for</span> x <span class="keyword">in</span> [<span class="number">0.</span>.fitnessIterations-<span class="number">1</span>]
+			<span class="property">@fitnessvals</span>[x] = <span class="property">@runSim</span>()
+		sum = <span class="number">0</span>
+		<span class="keyword">for</span> fitval <span class="keyword">in</span> <span class="property">@fitnessvals</span>
+			sum += fitval
+		<span class="property">@fitness</span> = sum/<span class="property">@fitnessvals</span>.length</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-14">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+              <p>console.log @fitness</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	runSim: -&gt;
+		grid = randomGrid()
+		<span class="property">@simvals</span> = 
+			x: <span class="number">0</span>
+			y: <span class="number">0</span>
+			move: <span class="number">0</span>
+			grid: grid
+			points: <span class="number">0</span>
+
+		<span class="keyword">while</span> <span class="property">@simvals</span>.move &lt; moveLimit</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-15">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-15">&#182;</a>
+              </div>
+              <p>console.log &quot;------------------&quot;+@simvals.move</p>
+<p>Look at the surrounding squares, turn them into strings, and convert that string to a base-3 integer - the index of the genome to use for this situation</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>			situation = <span class="property">@getSituation</span>()
+			index = parseInt(situation,<span class="string">'3'</span>)
+			choice = <span class="property">@genome</span>[index]
+
+			<span class="keyword">switch</span> choice
+				<span class="keyword">when</span> <span class="number">0</span>
+					<span class="property">@moveNorth</span>()
+
+				<span class="keyword">when</span> <span class="number">1</span>
+					<span class="property">@moveSouth</span>()
+				<span class="keyword">when</span> <span class="number">2</span>
+					<span class="property">@moveEast</span>()
+				<span class="keyword">when</span> <span class="number">3</span>
+					<span class="property">@moveWest</span>()
+				<span class="keyword">when</span> <span class="number">5</span>
+					<span class="property">@pickUpCan</span>()
+				<span class="keyword">when</span> <span class="number">6</span>
+					<span class="property">@randomMove</span>()
+
+
+
+			<span class="property">@simvals</span>.move += <span class="number">1</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-16">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-16">&#182;</a>
+              </div>
+              <p>console.log &quot;Points: &quot; + @simvals.points</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		<span class="property">@simvals</span>.points</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-17">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h2">
+                <a class="pilcrow" href="#section-17">&#182;</a>
+              </div>
+              <h2>Looking around</h2>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-18">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-18">&#182;</a>
+              </div>
+              <p>Build a string corresponding to the current situation (North, South, East, West, Current where 0=empty, 1=can, 2=wall)</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	getSituation: -&gt;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-19">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-19">&#182;</a>
+              </div>
+              <p>console.log &quot;Current x: &quot; + @simvals.x
+console.log &quot;Current y: &quot; + @simvals.y</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		<span class="keyword">if</span> <span class="property">@simvals</span>.y == <span class="number">0</span>
+			north = <span class="string">'2'</span>
+		<span class="keyword">else</span>
+			north = String <span class="property">@simvals</span>.grid[<span class="property">@simvals</span>.x][<span class="property">@simvals</span>.y-<span class="number">1</span>]
+
+		<span class="keyword">if</span> <span class="property">@simvals</span>.y == sideLength-<span class="number">1</span>
+			south = <span class="string">'2'</span>
+		<span class="keyword">else</span>
+			south = String <span class="property">@simvals</span>.grid[<span class="property">@simvals</span>.x][<span class="property">@simvals</span>.y+<span class="number">1</span>]
+
+		<span class="keyword">if</span> <span class="property">@simvals</span>.x == <span class="number">0</span>
+			west = <span class="string">'2'</span>
+		<span class="keyword">else</span>
+			west = String <span class="property">@simvals</span>.grid[<span class="property">@simvals</span>.x-<span class="number">1</span>][<span class="property">@simvals</span>.y]
+
+		<span class="keyword">if</span> <span class="property">@simvals</span>.x == sideLength-<span class="number">1</span>
+			east = <span class="string">'2'</span>
+		<span class="keyword">else</span>
+			east = String <span class="property">@simvals</span>.grid[<span class="property">@simvals</span>.x+<span class="number">1</span>][<span class="property">@simvals</span>.y]
+
+		current = String <span class="property">@simvals</span>.grid[<span class="property">@simvals</span>.x][<span class="property">@simvals</span>.y]</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-20">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-20">&#182;</a>
+              </div>
+              <p>displayGrid(@simvals.grid)</p>
+<p>console.log &quot;North: &quot; + north
+console.log &quot;South: &quot; + south
+console.log &quot;East: &quot; + east
+console.log &quot;West: &quot; + west
+console.log &quot;Current: &quot; + current</p>
+<p>Concatenate to a single base-3 string. This will be converted to an integer that maps to a location in the solution&#39;s genome.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		north+south+east+west+current</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-21">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h2">
+                <a class="pilcrow" href="#section-21">&#182;</a>
+              </div>
+              <h2>Going places</h2>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-22">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-22">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	moveNorth: -&gt;
+		<span class="keyword">if</span> <span class="property">@simvals</span>.y == <span class="number">0</span>
+			<span class="property">@simvals</span>.points -= <span class="number">5</span>
+		<span class="keyword">else</span>
+			<span class="property">@simvals</span>.y -= <span class="number">1</span>
+
+	moveSouth: -&gt;
+		<span class="keyword">if</span> <span class="property">@simvals</span>.y == sideLength-<span class="number">1</span>
+			<span class="property">@simvals</span>.points -= <span class="number">5</span>
+		<span class="keyword">else</span>
+			<span class="property">@simvals</span>.y += <span class="number">1</span>
+
+	moveEast: -&gt;
+		<span class="keyword">if</span> <span class="property">@simvals</span>.x == sideLength-<span class="number">1</span>
+			<span class="property">@simvals</span>.points -= <span class="number">5</span>
+		<span class="keyword">else</span>
+			<span class="property">@simvals</span>.x += <span class="number">1</span>
+
+	moveWest: -&gt;
+		<span class="keyword">if</span> <span class="property">@simvals</span>.x == <span class="number">0</span>
+			<span class="property">@simvals</span>.points -= <span class="number">5</span>
+		<span class="keyword">else</span>
+			<span class="property">@simvals</span>.x -= <span class="number">1</span>
+
+	pickUpCan: -&gt;
+		<span class="keyword">if</span> <span class="property">@simvals</span>.grid[<span class="property">@simvals</span>.x][<span class="property">@simvals</span>.y] == <span class="number">1</span>
+			<span class="property">@simvals</span>.points += <span class="number">10</span>
+			<span class="property">@simvals</span>.grid[<span class="property">@simvals</span>.x][<span class="property">@simvals</span>.y] = <span class="number">0</span>
+		<span class="keyword">else</span>
+			<span class="property">@simvals</span>.points -= <span class="number">1</span>
+
+	randomMove: -&gt;
+		randint = rando(<span class="number">0</span>,<span class="number">3</span>)
+		<span class="keyword">switch</span> randint
+			<span class="keyword">when</span> <span class="number">0</span>
+				<span class="property">@moveNorth</span>()
+			<span class="keyword">when</span> <span class="number">1</span>
+				<span class="property">@moveSouth</span>()
+			<span class="keyword">when</span> <span class="number">2</span>
+				<span class="property">@moveEast</span>()
+			<span class="keyword">when</span> <span class="number">3</span>
+				<span class="property">@moveWest</span>()
+
+
+randomGrid = () -&gt;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-23">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-23">&#182;</a>
+              </div>
+              <p>Build the grid and generate random cans. 0 is an empty location, 1 contains a can, and 2 is a wall</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	grid = []
+	<span class="keyword">for</span> x <span class="keyword">in</span> [<span class="number">0.</span>.sideLength-<span class="number">1</span>]
+		grid[x] = []
+		<span class="keyword">for</span> y <span class="keyword">in</span> [<span class="number">0.</span>.sideLength-<span class="number">1</span>]
+			grid[x][y] = rando <span class="number">0</span>,<span class="number">1</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-24">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-24">&#182;</a>
+              </div>
+              <p>Comparator function to sort the array of objects by the $avgfitness value of each object</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="function"><span class="title">compare</span></span> = (a,b) -&gt;
+	<span class="keyword">if</span> a.fitness &gt; b.fitness
+		<span class="keyword">return</span> -<span class="number">1</span>
+	<span class="keyword">if</span> a.fitness &lt; b.fitness
+		<span class="keyword">return</span> <span class="number">1</span>
+	<span class="keyword">return</span> <span class="number">0</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-25">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h2">
+                <a class="pilcrow" href="#section-25">&#182;</a>
+              </div>
+              <h2>Kicking things off </h2>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-26">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-26">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>initialize = () -&gt;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-27">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-27">&#182;</a>
+              </div>
+              <p>Generate a bunch of initial candidate solutions</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	solutions = []
+	<span class="keyword">for</span> x <span class="keyword">in</span> [<span class="number">0.</span>.carryingCapacity-<span class="number">1</span>]
+		s = <span class="keyword">new</span> Solution
+		s.randomGenome()
+		solutions[x] = s
+
+	i=<span class="number">0</span>
+	<span class="keyword">while</span> i &lt; numIterations
+		console.log <span class="string">"%%%%%%%%%%%%%%% "</span> + i + <span class="string">" %%%%%%%%%%%%%%%"</span>
+		<span class="keyword">for</span> s <span class="keyword">in</span> solutions
+			s.findFitness()
+		i+=<span class="number">1</span>
+
+	solutions.sort(compare);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-28">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-28">&#182;</a>
+              </div>
+              <p>Calculate the total, in order to normalize. This total is based on the distance between the best solutions and the worst solutions</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	total = <span class="number">0</span>
+	<span class="keyword">for</span> s <span class="keyword">in</span> solutions
+		s.dfitness = s.fitness - solutions[solutions.length-<span class="number">1</span>].fitness
+		total += s.dfitness
+	console.log total
+
+	<span class="keyword">for</span> s <span class="keyword">in</span> solutions
+		s.fracfitness = s.dfitness/total
+		console.log s.fracfitness
+
+initialize()</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>
